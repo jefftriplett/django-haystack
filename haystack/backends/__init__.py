@@ -4,7 +4,7 @@ from time import time
 from django.conf import settings
 from django.db.models import Q
 from django.db.models.base import ModelBase
-from django.utils import tree
+from django.utils import six, tree
 from haystack.constants import VALID_FILTERS, FILTER_SEPARATOR, DEFAULT_ALIAS
 from haystack.exceptions import MoreLikeThisError, FacetingError, StatsError
 from haystack.models import SearchResult
@@ -581,7 +581,7 @@ class BaseSearchQuery(object):
 
         A basic (override-able) implementation is provided.
         """
-        if not isinstance(query_fragment, basestring):
+        if not isinstance(query_fragment, six.string_types):
             return query_fragment
 
         words = query_fragment.split()

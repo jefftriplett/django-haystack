@@ -6,6 +6,7 @@ import warnings
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
 from django.db.models.loading import get_model
+from django.utils import six
 from django.utils.datetime_safe import datetime
 from haystack.backends import BaseEngine, BaseSearchBackend, BaseSearchQuery, log_query, EmptyResults
 from haystack.constants import ID, DJANGO_CT, DJANGO_ID
@@ -688,7 +689,7 @@ class WhooshSearchBackend(BaseSearchBackend):
         elif value == 'false':
             return False
 
-        if value and isinstance(value, basestring):
+        if value and isinstance(value, six.string_types):
             possible_datetime = DATETIME_REGEX.search(value)
 
             if possible_datetime:
@@ -759,7 +760,7 @@ class WhooshSearchQuery(BaseSearchQuery):
             if hasattr(value, 'strftime'):
                 is_datetime = True
 
-            if isinstance(value, basestring) and value != ' ':
+            if isinstance(value, six.string_types) and value != ' ':
                 # It's not an ``InputType``. Assume ``Clean``.
                 value = Clean(value)
             else:
@@ -799,7 +800,7 @@ class WhooshSearchQuery(BaseSearchQuery):
                     # Iterate over terms & incorportate the converted form of each into the query.
                     terms = []
 
-                    if isinstance(prepared_value, basestring):
+                    if isinstance(prepared_value, six.string_types):
                         possible_values = prepared_value.split(' ')
                     else:
                         if is_datetime is True:
@@ -828,7 +829,7 @@ class WhooshSearchQuery(BaseSearchQuery):
                     if is_datetime is True:
                         pv = self._convert_datetime(pv)
 
-                    if isinstance(pv, basestring) and not is_datetime:
+                    if isinstance(pv, six.string_types) and not is_datetime:
                         in_options.append('"%s"' % pv)
                     else:
                         in_options.append('%s' % pv)

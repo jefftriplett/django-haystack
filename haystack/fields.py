@@ -1,6 +1,6 @@
 from __future__ import unicode_literals
 import re
-from django.utils import datetime_safe
+from django.utils import datetime_safe, six
 from django.template import loader, Context
 from haystack.exceptions import SearchFieldError
 
@@ -189,7 +189,7 @@ class LocationField(SearchField):
             value = ensure_point(value)
             return value
 
-        if isinstance(value, basestring):
+        if isinstance(value, six.string_types):
             lat, lng = value.split(',')
         elif isinstance(value, (list, tuple)):
             # GeoJSON-alike
@@ -305,7 +305,7 @@ class DateField(SearchField):
         if value is None:
             return None
 
-        if isinstance(value, basestring):
+        if isinstance(value, six.string_types):
             match = DATETIME_REGEX.search(value)
 
             if match:
@@ -330,7 +330,7 @@ class DateTimeField(SearchField):
         if value is None:
             return None
 
-        if isinstance(value, basestring):
+        if isinstance(value, six.string_types):
             match = DATETIME_REGEX.search(value)
 
             if match:

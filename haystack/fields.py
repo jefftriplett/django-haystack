@@ -161,7 +161,7 @@ class CharField(SearchField):
         if value is None:
             return None
 
-        return unicode(value)
+        return force_text(value)
 
 
 class LocationField(SearchField):

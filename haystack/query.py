@@ -8,6 +8,10 @@ from haystack.exceptions import NotHandled
 from haystack.inputs import Raw, Clean, AutoQuery
 from haystack.utils import log as logging
 
+try:
+    long
+except NameError:
+    long = int
 
 class SearchQuerySet(object):
     """

@@ -8,10 +8,14 @@ from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
 from django.core.management.base import LabelCommand
 from django.db import reset_queries
-from django.utils.encoding import smart_str, force_unicode
 
 from haystack import connections as haystack_connections
 from haystack.query import SearchQuerySet
+
+try:
+    from django.utils.encoding import force_text, smart_bytes
+except ImportError:
+    from django.utils.encoding import force_unicode as force_text, smart_str as smart_bytes
 
 try:
     from django.utils.timezone import now
@@ -90,7 +94,7 @@ def do_remove(backend, index, model, pks_seen, start, upper_bound, verbosity=1):
     # Iterate over those results.
     for result in stuff_in_the_index:
         # Be careful not to hit the DB.
-        if not smart_str(result.pk) in pks_seen:
+        if not smart_bytes(result.pk) in pks_seen:
             # The id is NOT in the small_cache_qs, issue a delete.
             if verbosity >= 2:
                 print "  removing %s." % result.pk
@@ -241,9 +245,9 @@ class Command(LabelCommand):
             total = qs.count()
 
             if self.verbosity >= 1:
-                print u"Indexing %d %s" % (total, force_unicode(model._meta.verbose_name_plural))
+                print u"Indexing %d %s" % (total, force_text(model._meta.verbose_name_plural))
 
-            pks_seen = set([smart_str(pk) for pk in qs.values_list('pk', flat=True)])
+            pks_seen = set([smart_bytes(pk) for pk in qs.values_list('pk', flat=True)])
             batch_size = self.batchsize or backend.batch_size
 
             if self.workers > 0:
@@ -267,7 +271,7 @@ class Command(LabelCommand):
                     # They're using a reduced set, which may not incorporate
                     # all pks. Rebuild the list with everything.
                     qs = index.index_queryset().values_list('pk', flat=True)
-                    pks_seen = set([smart_str(pk) for pk in qs])
+                    pks_seen = set([smart_bytes(pk) for pk in qs])
                     total = len(pks_seen)
 
                 if self.workers > 0:

@@ -4,6 +4,11 @@ from django.utils import datetime_safe
 from django.template import loader, Context
 from haystack.exceptions import SearchFieldError
 
+try:
+    from django.utils.encoding import force_text
+except ImportError:
+    from django.utils.encoding import force_unicode as force_text
+
 
 class NOT_PROVIDED:
     pass
@@ -265,7 +270,7 @@ class DecimalField(SearchField):
         if value is None:
             return None
 
-        return unicode(value)
+        return force_text(value)
 
 
 class BooleanField(SearchField):

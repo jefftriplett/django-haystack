@@ -14,6 +14,11 @@ from haystack.utils import get_identifier
 from haystack.utils import log as logging
 
 try:
+    from django.utils.encoding import force_text
+except ImportError:
+    from django.utils.encoding import force_unicode as force_text
+
+try:
     import requests
 except ImportError:
     raise MissingDependency("The 'elasticsearch' backend requires the installation of 'requests'.")
@@ -707,7 +712,7 @@ class ElasticsearchSearchBackend(BaseSearchBackend):
         if iso:
             return iso
         elif isinstance(value, str):
-            return unicode(value, errors='replace')  # TODO: Be stricter.
+            return force_text(value, errors='replace')  # TODO: Be stricter.
         elif isinstance(value, set):
             return list(value)
         return value

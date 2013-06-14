@@ -162,7 +162,7 @@ class SearchResult(object):
             self.log.error("Model could not be found for SearchResult '%s'.", self)
             return u''
 
-        return unicode(self.model._meta)
+        return force_text(self.model._meta)
 
     def get_additional_fields(self):
         """

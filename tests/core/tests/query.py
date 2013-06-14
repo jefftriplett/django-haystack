@@ -662,7 +662,7 @@ class SearchQuerySetTestCase(TestCase):
         try:
             sqs = self.msqs.date_facet('foo', start_date=datetime.date(2008, 2, 25), end_date=datetime.date(2009, 2, 25), gap_by='smarblaph')
             self.fail()
-        except FacetingError, e:
+        except FacetingError as e:
             self.assertEqual(str(e), "The gap_by ('smarblaph') must be one of the following: year, month, day, hour, minute, second.")
 
         sqs = self.msqs.date_facet('foo', start_date=datetime.date(2008, 2, 25), end_date=datetime.date(2009, 2, 25), gap_by='month')

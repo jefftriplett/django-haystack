@@ -287,7 +287,7 @@ class SearchIndexTestCase(TestCase):
             try:
                 index.queue = queue
                 prepped = index.prepare(model)
-            except Exception, e:
+            except Exception as e:
                 exceptions.append(e)
                 raise
 

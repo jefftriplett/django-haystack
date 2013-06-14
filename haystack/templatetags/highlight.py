@@ -49,7 +49,7 @@ class HighlightNode(template.Node):
                 highlighter_path, highlighter_classname = '.'.join(path_bits[:-1]), path_bits[-1]
                 highlighter_module = importlib.import_module(highlighter_path)
                 highlighter_class = getattr(highlighter_module, highlighter_classname)
-            except (ImportError, AttributeError), e:
+            except (ImportError, AttributeError) as e:
                 raise ImproperlyConfigured("The highlighter '%s' could not be imported: %s" % (settings.HAYSTACK_CUSTOM_HIGHLIGHTER, e))
         else:
             from haystack.utils import Highlighter

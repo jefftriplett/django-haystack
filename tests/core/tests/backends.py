@@ -43,17 +43,17 @@ class LoadBackendTestCase(TestCase):
         try:
             backend = loading.load_backend('foobar')
             self.fail()
-        except ImproperlyConfigured, e:
+        except ImproperlyConfigured as e:
             self.assertEqual(str(e), "The provided backend 'foobar' is not a complete Python path to a BaseEngine subclass.")
         
         try:
             backend = loading.load_backend('foobar.FooEngine')
             self.fail()
-        except ImportError, e:
+        except ImportError as e:
             pass
         
         try:
             backend = loading.load_backend('haystack.backends.simple_backend.FooEngine')
             self.fail()
-        except ImportError, e:
+        except ImportError as e:
             self.assertEqual(str(e), "The Python module 'haystack.backends.simple_backend' has no 'FooEngine' class.")

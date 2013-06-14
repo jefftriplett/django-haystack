@@ -95,7 +95,7 @@ class SearchViewTestCase(TestCase):
             try:
                 inst = view(request)
                 queue.put(request.GET['name'])
-            except Exception, e:
+            except Exception as e:
                 exceptions.append(e)
                 raise
 
